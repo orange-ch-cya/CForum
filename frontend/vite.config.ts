@@ -24,7 +24,7 @@ export default defineConfig({
 				register: path.resolve(__dirname, 'pages', 'register.html'),
 				forgot: path.resolve(__dirname, 'pages', 'forgot.html'),
 				reset: path.resolve(__dirname, 'pages', 'reset.html'),
-				post: path.resolve(__dirname, 'pages', 'post.html'),
+				post: path.resolve(__dirname, 'pages', 'p.html'),
 				settings: path.resolve(__dirname, 'pages', 'settings.html'),
 				admin: path.resolve(__dirname, 'pages', 'admin.html')
 			}
