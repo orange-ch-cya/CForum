@@ -396,7 +396,7 @@ export function IndexPage() {
 		setAdminActionPostId(post.id);
 		try {
 			const next = !post.is_pinned;
-			await apiFetch(`/admin/posts/${post.id}/pin`, {
+			await apiFetch(`/admin/p?id=${post.id}/pin`, {
 				method: 'POST',
 				headers: getSecurityHeaders('POST'),
 				body: JSON.stringify({ pinned: next })
@@ -415,7 +415,7 @@ export function IndexPage() {
 		if (!confirm('确定要删除这个帖子吗？此操作无法撤销。')) return;
 		setAdminActionPostId(post.id);
 		try {
-			await apiFetch(`/admin/posts/${post.id}`, {
+			await apiFetch(`/admin/p?id=${post.id}`, {
 				method: 'DELETE',
 				headers: getSecurityHeaders('DELETE')
 			});
@@ -432,7 +432,7 @@ export function IndexPage() {
 		if (!user || user.role !== 'admin') return;
 		setAdminActionPostId(post.id);
 		try {
-			await apiFetch(`/admin/posts/${post.id}/move`, {
+			await apiFetch(`/admin/p?id=${post.id}/move`, {
 				method: 'POST',
 				headers: getSecurityHeaders('POST'),
 				body: JSON.stringify({ category_id: categoryId })
