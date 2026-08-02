@@ -31,6 +31,13 @@ renderer.code = (({ text, lang }: { text: string; lang?: string }) => {
 	const normalized = normalizeLang(lang || '');
 	return `<div class="shj-lang-${normalized}">${escapeHtml(text)}</div>`;
 }) as any;
+// 在 renderer.code 之前或之后添加
+renderer.link = ({ href, title, text }: { href: string; title?: string | null; text: string }) => {
+    const isExternal = href && (href.startsWith('http://') || href.startsWith('https://'));
+    const target = isExternal ? ' target="_blank" rel="noopener noreferrer"' : '';
+    const titleAttr = title ? ` title="${escapeHtml(title)}"` : '';
+    return `<a href="${escapeHtml(href)}"${titleAttr}${target}>${text}</a>`;
+};
 renderer.codespan = (({ text }: { text: string }) => {
 	return `<code class="shj-inline">${escapeHtml(text)}</code>`;
 }) as any;
@@ -52,7 +59,7 @@ export function renderMarkdownToHtml(markdown: string) {
 	const windowLike = window as unknown as Window;
 	const DOMPurify = createDOMPurify(windowLike);
 	return DOMPurify.sanitize(marked.parse(markdown) as string, {
-		ADD_ATTR: ['data-fancybox', 'data-caption', 'referrerpolicy']
+		ADD_ATTR: ['data-fancybox', 'data-caption', 'referrerpolicy', 'target', 'rel']
 	});
 }
 
