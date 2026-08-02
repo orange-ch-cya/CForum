@@ -10,7 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useConfig } from '@/hooks/use-config';
 import { apiFetch, formatDate, getSecurityHeaders, type Category, type Comment, type Post } from '@/lib/api';
 import { getToken, getUser } from '@/lib/auth';
-import { attachFancybox, highlightCodeBlocks, renderMarkdownToHtml } from '@/lib/markdown.ts';
+import { attachFancybox, highlightCodeBlocks, renderMarkdownToHtml } from '@/lib/markdown';
 import { validateText } from '@/lib/validators';
 
 export function PostPage() {
