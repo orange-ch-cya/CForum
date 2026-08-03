@@ -200,7 +200,7 @@ export function PostPage() {
 
 		setCommentLoading(true);
 		try {
-			await apiFetch(`/p?id=${postId}/comments`, {
+			await apiFetch(`/api/posts/${postId}/comments`, {
 				method: 'POST',
 				headers: getSecurityHeaders('POST'),
 				body: JSON.stringify({
