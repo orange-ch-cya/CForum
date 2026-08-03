@@ -1756,6 +1756,56 @@ const user = await env.cforum_db.prepare('SELECT * FROM users WHERE email_change
 			}
 		}
 
+		// POST /api/posts/:id/comments
+		if (url.pathname.match(/^\/api\/posts\/\d+\/comments$/) && method === 'POST') {
+			const postId = url.pathname.split('/')[3];
+			try {
+				const userPayload = await authenticate(request);
+				const body = await request.json() as any;
+				const { content, parent_id, 'cf-turnstile-response': turnstileToken } = body;
+		
+				if (!content) {
+					return jsonResponse({ error: '评论内容不能为空' }, 400);
+				}
+
+				// 验证内容长度
+				if (content.length > 3000) {
+					return jsonResponse({ error: '评论过长 (最多 3000 字符)' }, 400);
+				}
+
+				// 检查帖子是否存在
+				const post = await env.cforum_db.prepare('SELECT id FROM posts WHERE id = ?').bind(postId).first();
+				if (!post) {
+					return jsonResponse({ error: '帖子不存在' }, 404);
+				}
+
+				// 如果有 parent_id，检查父评论是否存在
+				if (parent_id) {
+					const parent = await env.cforum_db.prepare('SELECT id FROM comments WHERE id = ?').bind(parent_id).first();
+					if (!parent) {
+						return jsonResponse({ error: '父评论不存在' }, 404);
+					}
+				}
+
+				// 内容转义（防止 XSS）
+				const safeContent = content
+					.replace(/&/g, '&amp;')
+					.replace(/</g, '&lt;')
+					.replace(/>/g, '&gt;')
+					.replace(/"/g, '&quot;')
+					.replace(/'/g, '&#039;');
+
+				await env.cforum_db.prepare(
+					'INSERT INTO comments (post_id, parent_id, author_id, content) VALUES (?, ?, ?, ?)'
+				).bind(postId, parent_id || null, userPayload.id, safeContent.trim()).run();
+
+				await security.logAudit(userPayload.id, 'CREATE_COMMENT', 'comment', 'new', { post_id: postId }, request);
+		
+				return jsonResponse({ success: true }, 201);
+			} catch (e) {
+				return handleError(e);
+			}
+		}
 		// DELETE /api/comments/:id
 		if (url.pathname.match(/^\/api\/comments\/\d+$/) && method === 'DELETE') {
 			const id = url.pathname.split('/').pop();
