@@ -1687,7 +1687,7 @@ const user = await env.cforum_db.prepare('SELECT * FROM users WHERE email_change
 
 				// Validate Lengths
 				if (title.length > 30) return jsonResponse({ error: 'Title too long (Max 30 chars)' }, 400);
-				if (content.length > 3000) return jsonResponse({ error: 'Content too long (Max 3000 chars)' }, 400);
+				if (content.length > 10000) return jsonResponse({ error: 'Content too long (Max 10000 chars)' }, 400);
 				if (hasControlCharacters(title) || hasControlCharacters(content)) return jsonResponse({ error: 'Title or content contains invalid control characters' }, 400);
 
 				// Validate Category
@@ -1769,8 +1769,8 @@ const user = await env.cforum_db.prepare('SELECT * FROM users WHERE email_change
 				}
 
 				// 验证内容长度
-				if (content.length > 3000) {
-					return jsonResponse({ error: '评论过长 (最多 3000 字符)' }, 400);
+				if (content.length > 10000) {
+					return jsonResponse({ error: '评论过长 (最多 10000 字符)' }, 400);
 				}
 
 				// 检查帖子是否存在
@@ -1898,7 +1898,7 @@ const user = await env.cforum_db.prepare('SELECT * FROM users WHERE email_change
 
 				// Validate Lengths
 				if (title.length > 30) return jsonResponse({ error: 'Title too long (Max 30 chars)' }, 400);
-				if (content.length > 3000) return jsonResponse({ error: 'Content too long (Max 3000 chars)' }, 400);
+				if (content.length > 10000) return jsonResponse({ error: 'Content too long (Max 10000 chars)' }, 400);
 
 				if (hasControlCharacters(title) || hasControlCharacters(content)) return jsonResponse({ error: 'Title or content contains invalid control characters' }, 400);
 
