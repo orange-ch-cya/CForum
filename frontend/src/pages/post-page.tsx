@@ -294,7 +294,7 @@ export function PostPage() {
 		const contentErr = validateText(editContent, '内容');
 		if (contentErr) return setEditError(contentErr);
 		if (editTitle.length > 30) return setEditError('标题过长 (最多 30 字符)');
-		if (editContent.length > 3000) return setEditError('内容过长 (最多 3000 字符)');
+		if (editContent.length > 10000) return setEditError('内容过长 (最多 10000 字符)');
 
 		setEditLoading(true);
 		try {
